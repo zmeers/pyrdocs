@@ -1,0 +1,14 @@
+Package: pyrdocs
+Type: Package
+Title: Generate R and Python Documentation for a Quarto Site
+Version: 0.1.0
+Author: Zoe Meers
+Maintainer: Zoe Meers <zoe.meers@gmail.com>
+Description: Generates R and Python documentation in a format similar to `pkgdown` which is specifically built for R packages. Distinctly, function references have R and Python tabs with the function definition and arguments for both programming languages.
+License: MIT
+Encoding: UTF-8
+LazyData: true
+Imports: 
+    ecodown
+Remotes:  
+    zmeers/ecodown
