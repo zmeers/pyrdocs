@@ -1,6 +1,6 @@
 Package: pyrdocs
 Type: Package
-Title: Generate R and Python Documentation for a Quarto Site
+Title: Generate R and Python Documentation for a Quarto Website
 Version: 0.1.0
 Author: Zoe Meers
 Maintainer: Zoe Meers <zoe.meers@gmail.com>
@@ -9,6 +9,30 @@ License: MIT
 Encoding: UTF-8
 LazyData: true
 Imports: 
-    ecodown
+    quarto,
+    ecodown,
+    tools,
+    parsermd,
+    rstudioapi,
+    magrittr,
+    pkgdown,
+    downlit,
+    crayon,
+    quarto,
+    git2r,
+    purrr,
+    rlang,
+    here,
+    gert,
+    yaml,
+    fs
+Roxygen: list(markdown = TRUE)
+Suggests: 
+    knitr,
+    covr,
+    testthat (>= 3.0.0),
+    rmarkdown
 Remotes:  
     zmeers/ecodown
+Config/testthat/edition: 3
+VignetteBuilder: knitr

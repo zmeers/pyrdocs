@@ -31,8 +31,16 @@ generate_python_md_modules <- function(python_pkg, python_module){
    }
 }
 
-split_and_clean_python_md_modules <- function(python_pkg, python_module){
+split_and_clean_python_md_modules <- function(python_pkg,
+                                              python_module,
+                                              quarto_folder,
+                                              quarto_sub_folder,
+                                              python_reference_folder,
+                                              reference_folder){
 
+  if(!dir.exists(paste0(python_pkg, "/docs"))){
+    dir.create(paste0(python_pkg, "/docs"))
+  }
   markdown_files <- as.vector(
     dir(paste0(python_pkg, "/docs"),
         pattern = "^[a-z].*.md$",
@@ -80,16 +88,13 @@ split_and_clean_python_md_modules <- function(python_pkg, python_module){
     })
     for(j in 1:nrow(functions)){
       # write each row out to separate file
-      file_name <- gsub("`", "", functions[[1]][[j]])
-      if(!dir.exists(paste0(python_pkg, '/docs/py_docs'))){
-        dir.create(paste0(python_pkg, "/docs/py_docs"))
-      }
-        sink(paste0(python_pkg,"/docs/py_docs/",  file_name, ".md"))
+        file_name <- gsub("`", "", functions$sec_h4[[j]])
+        sink(paste0(quarto_folder, "/", quarto_sub_folder, "/", reference_folder, "/", python_reference_folder, "/", file_name, ".md"))
         cat(functions$ast[[j]], sep = "\n")
         cat("#### Class \n", sep = "\n")
         cat(function_parent_class$ast[[1]], sep = "\n")
         cat("#### Module Source \n", sep = "\n")
-        cat(function_module_src[[1]][[1]], sep = "\n")
+        cat(function_module_src$sec_h4[[1]], sep = "\n")
         sink()
     }
   }
