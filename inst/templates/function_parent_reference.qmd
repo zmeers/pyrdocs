@@ -1,0 +1,29 @@
+---
+title: "{{{{notitle.title}}}}"
+params:
+  python_param : "python"
+  r_param : "r"
+---
+
+
+{{{{title.description}}}}
+
+::: {.panel-tabset group="language"}
+### Python
+
+```{r}
+#| child: params$python_param
+```
+
+### R
+
+```{r}
+#| child: params$r_param
+```
+
+:::
+
+
+{{{{title.seealso}}}}
+
+{{{{title.author}}}}
