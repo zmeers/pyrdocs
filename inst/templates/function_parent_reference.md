@@ -1,8 +1,5 @@
 ---
 title: "{{{{notitle.title}}}}"
-params:
-  python_param : "python"
-  r_param : "r"
 ---
 
 
@@ -12,14 +9,15 @@ params:
 ### Python
 
 ```{r}
-#| child: paste0('py_docs/', {{{{title.title}}}}, '.md')
+#| child: paste0('py_docs/', {{{{notitle.title}}}}, '.md')
 ```
 
 ### R
 
 ```{r}
-#| child: paste0('r_docs/', {{{{title.title}}}}, '.md')
+#| child: paste0('r_docs/', {{{{notitle.title}}}}, '.md')
 ```
+
 :::
 
 
