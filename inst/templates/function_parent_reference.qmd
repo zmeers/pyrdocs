@@ -1,28 +1,24 @@
----
-title: "{{{{notitle.title}}}}"
-params:
-  python_param : "python"
-  r_param : "r"
----
 
-
-{{{{title.description}}}}
+### {{{{notitle.description}}}}
 
 ::: {.panel-tabset group="language"}
 ### Python
 
 ```{r}
-#| child: paste0('py_docs/', {{{{title.title}}}}, '.md')
+#| child: 'py_docs/{{{{notitle.alias}}}}.md'
 ```
 
 ### R
 
 ```{r}
-#| child: paste0('r_docs/', {{{{title.title}}}}, '.md')
+#| child: 'r_docs/{{{{notitle.alias}}}}.md'
 ```
 :::
 
+### See also
 
-{{{{title.seealso}}}}
+{{{{notitle.seealso}}}}
 
-{{{{title.author}}}}
+### Author(s)
+
+{{{{notitle.author}}}}
