@@ -47,10 +47,10 @@ pyrdocs_convert <- function(package_source_folder = here::here(),
   ecodown::ecodown_build(quarto_folder = paste0(r_package_path, "/", quarto_sub_folder))
 
   setwd(path='..')
-  if (!dir.exists(quarto_sub_folder) {
+  if (!dir.exists(quarto_sub_folder)) {
     dir.create(path = quarto_sub_folder)
   }
-  file.move(paste0(r_package_path, quarto_sub_folder), quarto_sub_folder))
+  file.move(paste0(r_package_path, quarto_sub_folder), quarto_sub_folder)
   ## generate python docs
   if(!dir.exists(paste0(quarto_folder, quarto_sub_folder, reference_folder, python_reference_folder, collapse = "/"))){
     dir.create(paste0(quarto_folder, quarto_sub_folder, reference_folder, collapse = "/"))
