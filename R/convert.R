@@ -1,11 +1,10 @@
 pyrdocs_convert <- function(package_source_folder = "",
-                            r_sub_folder = "",
-                            python_sub_folder = "",
+                            r_sub_folder = "R_package",
+                            python_sub_folder = "python_package",
                             branch = "main",
                             quarto_sub_folder = package_name,
                             version_folder = "",
                             package_name = fs::path_file(package_source_folder),
-                            quarto_folder = "",
                             downlit_options = TRUE,
                             site_url = qe(quarto_folder, "site", "site-url"),
                             verbosity = c("verbose", "summary", "silent"),
@@ -35,7 +34,7 @@ pyrdocs_convert <- function(package_source_folder = "",
   ## generate R docs
   ecodown::ecodown_convert(package_source_folder = r_package_path,
                            branch = branch,
-                           quarto_folder = quarto_folder,
+                           quarto_folder = r_package_path,
                            quarto_sub_folder = quarto_sub_folder,
                            reference_folder = reference_folder,
                            r_reference_folder = r_reference_folder,
@@ -45,12 +44,13 @@ pyrdocs_convert <- function(package_source_folder = "",
                            reference_template = reference_template,
                            reference_template_parent = reference_template_parent
   )
+  ecodown::ecodown_build(quarto_folder = paste0(r_package_path, "/", quarto_sub_folder))
   ## generate python docs
-
   if(!dir.exists(paste0(quarto_folder, quarto_sub_folder, reference_folder, python_reference_folder, collapse = "/"))){
+    dir.create(paste0(quarto_folder, quarto_sub_folder, reference_folder, collapse = "/"))
     dir.create(paste0(quarto_folder, quarto_sub_folder, reference_folder, python_reference_folder, collapse = "/"))
   }
-  generate_python_md_modules(python_package_path, "canviz")
+  generate_python_md_modules(python_package_path, "canviz", reference_folder, python_reference_folder)
   split_and_clean_python_md_modules(python_package_path,
                                     "canviz",
                                     quarto_folder = package_source_folder,

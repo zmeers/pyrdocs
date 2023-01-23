@@ -1,4 +1,4 @@
-generate_python_md_modules <- function(python_pkg, python_module){
+generate_python_md_modules <- function(python_pkg, python_module, reference_folder, python_reference_folder){
 
    python_files <- as.vector(
      dir(paste0(python_pkg, "/", python_module),
@@ -96,11 +96,11 @@ split_and_clean_python_md_modules <- function(python_pkg,
             "#### Module Source \n",
             function_module_src$sec_h4[[1]],
             sep = "\n",
-            file = paste0(quarto_folder, "/",
-                          quarto_sub_folder, "/",
-                          reference_folder, "/",
-                          python_reference_folder, "/",
-                          file_name, ".md")
+            file = paste0(quarto_folder, '/',
+                          quarto_sub_folder, '/',
+                          reference_folder, '/',
+                          python_reference_folder, '/',
+                          file_name, '.md')
         )
       }
     }
