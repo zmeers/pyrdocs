@@ -5,13 +5,13 @@
 ### Python
 
 ```{r}
-#| child: 'py_docs/{{{{notitle.alias}}}}.md'
+#| child: '{{{{notitle.alias}}}}_py.md'
 ```
 
 ### R
 
 ```{r}
-#| child: 'r_docs/{{{{notitle.alias}}}}.md'
+#| child: '{{{{notitle.alias}}}}_r.md'
 ```
 :::
 
@@ -19,6 +19,3 @@
 
 {{{{notitle.seealso}}}}
 
-### Author(s)
-
-{{{{notitle.author}}}}
