@@ -1,8 +1,8 @@
-pyrdocs_convert <- function(package_source_folder = "",
+pyrdocs_convert <- function(package_source_folder = here::here(),
                             r_sub_folder = "R_package",
                             python_sub_folder = "python_package",
                             branch = "main",
-                            quarto_sub_folder = package_name,
+                            quarto_sub_folder = "quarto_docs",
                             version_folder = "",
                             package_name = fs::path_file(package_source_folder),
                             downlit_options = TRUE,
@@ -45,6 +45,12 @@ pyrdocs_convert <- function(package_source_folder = "",
                            reference_template_parent = reference_template_parent
   )
   ecodown::ecodown_build(quarto_folder = paste0(r_package_path, "/", quarto_sub_folder))
+
+  setwd(path='..')
+  if (!dir.exists(quarto_sub_folder) {
+    dir.create(path = quarto_sub_folder)
+  }
+  file.move(paste0(r_package_path, quarto_sub_folder), quarto_sub_folder))
   ## generate python docs
   if(!dir.exists(paste0(quarto_folder, quarto_sub_folder, reference_folder, python_reference_folder, collapse = "/"))){
     dir.create(paste0(quarto_folder, quarto_sub_folder, reference_folder, collapse = "/"))
