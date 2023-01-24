@@ -28,11 +28,12 @@ pyrdocs_convert <- function(package_source_folder = here::here(),
                             package_description = NULL
 ){
 
-  if(!fs::dir_exists(fs::path(r_sub_folder, quarto_sub_folder))){
-    fs::dir_create(fs::path(r_sub_folder,quarto_sub_folder))
-  }
+  # if(!fs::dir_exists(fs::path(r_sub_folder, quarto_sub_folder))){
+  #   fs::dir_create(fs::path(r_sub_folder,quarto_sub_folder))
+  # }
 
   ## generate R docs
+
   ecodown::ecodown_convert(package_source_folder = r_sub_folder,
                            branch = branch,
                            quarto_folder = r_sub_folder,
@@ -47,18 +48,23 @@ pyrdocs_convert <- function(package_source_folder = here::here(),
   md_files <- fs::dir_ls(fs::path(r_sub_folder, quarto_sub_folder, reference_folder), glob = "*.md")
   md_files <- md_files[md_files != paste0(fs::path(r_sub_folder, quarto_sub_folder, reference_folder), 'index.md')]
   r_md_files <- sub(".md", "_r.md", md_files)
-  file.rename(md_files, new_names)
+  file.rename(md_files, r_md_files)
 
-  setwd(dirname(here::here()))
 
-  fs::dir_copy(fs::path(r_sub_folder, quarto_sub_folder), fs::path(quarto_sub_folder))
-
+  fs::dir_copy(fs::path(r_sub_folder, quarto_sub_folder), fs::path(quarto_sub_folder), overwrite = T)
+  ecodown:::msg_color_title("Copying/Convering Python Files to Quarto")
   ## generate python docs
+  python_package_path <- fs::path(package_source_folder, python_sub_folder)
   generate_python_md_modules(python_package_path, "canviz", reference_folder)
   split_and_clean_python_md_modules(python_package_path,
                                     "canviz",
                                     quarto_folder = package_source_folder,
                                     quarto_sub_folder = quarto_sub_folder,
                                     reference_folder = reference_folder)
+
+  if(isTRUE(fs::file_exists("README.md"))){
+    fs::file_move("README.md", path(quarto_sub_folder, "index.md"))
+  }
+  ecodown:::msg_color_title(paste0("Rendered site documents can be access at ", crayon::blue(fs::path(here::here(), quarto_sub_folder))))
 
 }

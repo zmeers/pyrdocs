@@ -1,4 +1,6 @@
-generate_python_md_modules <- function(python_pkg, python_module, reference_folder){
+generate_python_md_modules <- function(python_pkg,
+                                       python_module,
+                                       reference_folder){
 
    python_files <- as.vector(
      dir(paste0(python_pkg, "/", python_module),
@@ -7,11 +9,13 @@ generate_python_md_modules <- function(python_pkg, python_module, reference_fold
                 full.names = F)
    )
 
+   if(!fs::dir_exists(fs::path(python_pkg, reference_folder))){
+     fs::dir_create(fs::path(python_pkg, reference_folder))
+   }
 
    for (i in python_files){
      i <- tools::file_path_sans_ext(i)
-     print(paste0("Converting docstrings in ", i, ".py to markdown"))
-
+     ecodown:::msg_color(paste0("Converting docstrings in ", i, ".py to markdown"))
      fs::file_chmod(system.file("shell_scripts/python_pydocs_to_md.sh", package = "pyrdocs"), "+x")
 
      system(
@@ -20,7 +24,8 @@ generate_python_md_modules <- function(python_pkg, python_module, reference_fold
                      package = "pyrdocs"),
          python_pkg,
          python_module,
-         i
+         i,
+         reference_folder
          )
        )
    }
@@ -32,22 +37,20 @@ split_and_clean_python_md_modules <- function(python_pkg,
                                               quarto_sub_folder,
                                               reference_folder){
 
-  if(!dir.exists(paste0(python_pkg, "/docs"))){
-    dir.create(paste0(python_pkg, "/docs"))
-  }
+
 
   markdown_files <- as.vector(
-    dir(paste0(python_pkg, "/docs"),
+    dir(paste0(python_pkg, reference_folder),
         pattern = "^[a-z].*.md$",
         ignore.case = T,
         full.names = F)
   )
 
 
-
   for (i in markdown_files){
     if(isTRUE(file.info(i)$size>0)){
-      print(paste("Splitting markdown docstrings for each function in", i, "to separate file."))
+      ecodown:::msg_color(paste0(crayon::silver(paste0("|--|-- ")), fs::path_ext_remove(i), '.py'), crayon::blue(" =>", fs::path_file(i)))
+
       md_file <-parsermd::parse_rmd(paste0(python_pkg, "/docs/", i))
       function_module_src <- parsermd::rmd_select(md_file, parsermd::by_section(c("Module *"))) |> parsermd::as_tibble()
       function_parent_class <- parsermd::rmd_select(md_file, parsermd::by_section(c("* Objects"))) |> parsermd::as_tibble()
@@ -87,13 +90,18 @@ split_and_clean_python_md_modules <- function(python_pkg,
         for(j in 1:nrow(functions)){
           # write each row out to separate file
           file_name <- gsub("`", "", functions$sec_h4[[j]])
+          new_file_name <- crayon::blue(" =>", file_name, '.md')
+          ecodown:::msg_color(paste0(old_file_name, new_file_name), '\n')
+
+
           cat(functions$ast[[j]],
               "#### Class \n",
               function_parent_class$ast[[1]],
               "#### Module Source \n",
               function_module_src$sec_h4[[1]],
               sep = "\n",
-              file = paste0(quarto_folder, '/',
+              file = paste0(dirnames(python_pkg),
+                            quarto_folder, '/',
                             quarto_sub_folder, '/',
                             reference_folder, '/',
                             file_name, '_py.md')

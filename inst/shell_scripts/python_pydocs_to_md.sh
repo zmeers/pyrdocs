@@ -6,7 +6,7 @@ for pkg in pydoc-markdown; do
   pip3 list --uptodate | grep "${pkg} " || pip3 install --upgrade ${pkg}
 done
 
-pydoc-markdown -m "$2"."$3" -I $(pwd) '{
+pydoc-markdown -p "$2"."$3" -I $(pwd) -q '{
     renderer: {
       type: markdown,
       descriptive_class_title: true,
@@ -25,4 +25,4 @@ pydoc-markdown -m "$2"."$3" -I $(pwd) '{
         Data: 4
       }
     }
-  }' > "$1"/docs/"$2"_"$3".md
+  }' > "$1"/"$4"/"$2"_"$3".md
