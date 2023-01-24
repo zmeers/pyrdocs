@@ -9,13 +9,13 @@ title: "{{{{notitle.title}}}}"
 ### Python
 
 ```{r}
-#| child: paste0('py_docs/', {{{{notitle.title}}}}, '.md')
+#| child: paste0({{{{notitle.title}}}}, '_py.md')
 ```
 
 ### R
 
 ```{r}
-#| child: paste0('r_docs/', {{{{notitle.title}}}}, '.md')
+#| child: paste0({{{{notitle.title}}}}, '_r.md')
 ```
 
 :::
@@ -23,4 +23,3 @@ title: "{{{{notitle.title}}}}"
 
 {{{{title.seealso}}}}
 
-{{{{title.author}}}}

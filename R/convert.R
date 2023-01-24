@@ -1,11 +1,10 @@
-pyrdocs_convert <- function(base_folder = "",
-                            r_sub_folder = "",
-                            python_sub_folder = "",
+pyrdocs_convert <- function(package_source_folder = here::here(),
+                            r_sub_folder = "R_package",
+                            python_sub_folder = "python_package",
                             branch = "main",
-                            quarto_sub_folder = package_name,
+                            quarto_sub_folder = "quarto_docs",
                             version_folder = "",
-                            package_name = fs::path_file(base_directory),
-                            quarto_folder = here::here(),
+                            package_name = fs::path_file(package_source_folder),
                             downlit_options = TRUE,
                             site_url = qe(quarto_folder, "site", "site-url"),
                             verbosity = c("verbose", "summary", "silent"),
@@ -21,79 +20,45 @@ pyrdocs_convert <- function(base_folder = "",
                             reference_examples_not_run = FALSE,
                             reference_output = "md",
                             reference_qmd_options = NULL,
-                            reference_template = NULL,
+                            build_parent_and_child_reference_pages = TRUE,
+                            reference_template_parent = system.file("templates/function_parent_reference.qmd", package = "pyrdocs"),
+                            reference_template_child = system.file("templates/function_child_reference.qmd", package = "pyrdocs"),
+                            reference_template = system.file("templates/function_child_reference.qmd", package = "pyrdocs"),
                             commit = c("latest_tag", "latest_commit"),
                             package_description = NULL
 ){
 
-  r_package_path <- paste0(base_folder, "/", r_sub_folder)
-  python_package_path <- paste0(base_folder, "/", python_sub_folder)
-
-  ## create directories
-  if(!dir.exists(paste0(quarto_folder, "/", quarto_sub_folder, "/", reference_folder))){
-    dir.create(paste0(quarto_folder, "/", quarto_sub_folder, "/", reference_folder))
-  }
-  if(!dir.exists(paste0(quarto_folder, "/", quarto_sub_folder, "/", reference_folder, "/", r_reference_folder))){
-    dir.create(paste0(quarto_folder, "/", quarto_sub_folder, "/", reference_folder, "/", r_reference_folder))
-  }
-  if(!dir.exists(paste0(quarto_folder, "/", quarto_sub_folder, "/", reference_folder, "/", python_reference_folder))){
-    dir.create(paste0(quarto_folder, "/", quarto_sub_folder, "/", reference_folder, "/", python_reference_folder))
-  }
-  ## generate R child docs
-  if(reference_output == "qmd"){
-    ecodown::ecodown_convert(r_package_path,
-                     branch = branch,
-                     quarto_folder = base_folder,
-                     quarto_sub_folder = "docs",
-                     reference_folder = "reference/r_docs",
-                     reference_output = "qmd",
-                     reference_template = system.file("function_child_reference.qmd", package = "pyrdocs")
-                     )
-  } else {
-    ecodown::ecodown_convert(r_package_path,
-                     branch = branch,
-                     quarto_folder = base_folder,
-                     quarto_sub_folder = "docs",
-                     reference_folder = "reference/r_docs",
-                     reference_output = "md",
-                     reference_template = system.file("function_child_reference.md", package = "pyrdocs")
-    )
+  if(!fs::dir_exists(fs::path(r_sub_folder, quarto_sub_folder))){
+    fs::dir_create(fs::path(r_sub_folder,quarto_sub_folder))
   }
 
-  ## generate parent docs for each function
-  if(reference_output == "qmd"){
-   ecodown::ecodown_convert(r_package_path,
-                   branch = branch,
-                   quarto_folder = base_folder,
-                   quarto_sub_folder = "docs",
-                   reference_folder = "reference",
-                   convert_articles = F,
-                   convert_readme = F,
-                   convert_news = F,
-                   convert_reference = T,
-                   reference_output = "qmd",
-                   reference_template = system.file("function_parent_reference.qmd", package = "pyrdocs"))
-  } else {
-    ecodown::ecodown_convert(r_package_path,
-                     branch = branch,
-                     quarto_folder = base_folder,
-                     quarto_sub_folder = "docs",
-                     reference_folder = "reference",
-                     convert_articles = F,
-                     convert_readme = F,
-                     convert_news = F,
-                     convert_reference = T,
-                     reference_output = "md",
-                     reference_template = system.file("function_parent_reference.md", package = "pyrdocs"))
-  }
+  ## generate R docs
+  ecodown::ecodown_convert(package_source_folder = r_sub_folder,
+                           branch = branch,
+                           quarto_folder = r_sub_folder,
+                           quarto_sub_folder = quarto_sub_folder,
+                           reference_folder = reference_folder,
+                           reference_output = reference_output,
+                           build_parent_and_child_reference_pages = build_parent_and_child_reference_pages,
+                           reference_template = reference_template,
+                           reference_template_parent = reference_template_parent
+  )
+
+  md_files <- fs::dir_ls(fs::path(r_sub_folder, quarto_sub_folder, reference_folder), glob = "*.md")
+  md_files <- md_files[md_files != paste0(fs::path(r_sub_folder, quarto_sub_folder, reference_folder), 'index.md')]
+  r_md_files <- sub(".md", "_r.md", md_files)
+  file.rename(md_files, new_names)
+
+  setwd(dirname(here::here()))
+
+  fs::dir_copy(fs::path(r_sub_folder, quarto_sub_folder), fs::path(quarto_sub_folder))
 
   ## generate python docs
-  generate_python_md_modules(python_package_path, "canviz")
+  generate_python_md_modules(python_package_path, "canviz", reference_folder)
   split_and_clean_python_md_modules(python_package_path,
                                     "canviz",
-                                    quarto_folder = base_folder,
+                                    quarto_folder = package_source_folder,
                                     quarto_sub_folder = quarto_sub_folder,
-                                    reference_folder = reference_folder,
-                                    python_reference_folder = python_reference_folder)
+                                    reference_folder = reference_folder)
 
 }
