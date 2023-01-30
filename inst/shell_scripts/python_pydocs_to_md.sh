@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-cd "$1"
+cd "$1"/"$2"
 # install or update pip and yq if they are not installed or up to date
 for pkg in pydoc-markdown; do
-  pip3 list --uptodate | grep "${pkg} " || pip3 install --upgrade ${pkg}
+  pip3 list --q --uptodate | grep "${pkg} " || pip3 install --upgrade ${pkg} --q
 done
 
-pydoc-markdown -m "$2"."$3" -I $(pwd) '{
+pydoc-markdown -m "$3"."$4" -I $(pwd) -q '{
     renderer: {
       type: markdown,
       descriptive_class_title: true,
@@ -15,6 +15,7 @@ pydoc-markdown -m "$2"."$3" -I $(pwd) '{
       add_member_class_prefix: true,
       insert_header_anchors: false,
       code_headers: true,
+      format_code: false,
       signature_in_header: false,
       use_fixed_header_levels: true,
       header_level_by_type:{
@@ -25,4 +26,5 @@ pydoc-markdown -m "$2"."$3" -I $(pwd) '{
         Data: 4
       }
     }
-  }' > "$1"/docs/"$2"_"$3".md
+  }' > "$1"/"$2"/"$5"/"$4".md
+
