@@ -145,7 +145,7 @@ pyrdocs_convert <- function(package_source_folder = here::here(),
     fs::path(here::here(), quarto_sub_folder, fs::path_file(site_yml_file))
   )
 
-  if(fs::dir_exists(here::here(), quarto_sub_folder, "html")) fs::dir_delete(here::here(), quarto_sub_folder, "html")
+  if(fs::dir_exists(fs::path(here::here(), quarto_sub_folder, "html"))) fs::dir_delete(fs::path(here::here(), quarto_sub_folder, "html"))
 
   if(!is.null(site_docs)){
     fs::dir_copy(
