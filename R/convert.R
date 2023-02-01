@@ -30,7 +30,7 @@ pyrdocs_convert <- function(package_source_folder = here::here(),
 ){
 
   # sha_file <- fs::path(qfs, ".ecodown")
-  # if (fs::ile_exists(sha_file)) {
+  # if (fs::file_exists(sha_file)) {
   #   sha_existing <- readLines(sha_file)
   #   if (sha_existing == sha) {
   #     ecodown::downlit_options(
