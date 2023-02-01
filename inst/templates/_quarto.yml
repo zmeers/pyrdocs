@@ -1,0 +1,17 @@
+project:
+  type: website
+
+website:
+  title: "Package Documentation"
+  navbar:
+    left:
+      - href: index.md
+        text: About
+      - href: reference/index.md
+        text: Reference
+      - href: articles/
+        text: Articles
+
+format:
+  html:
+    theme: litera
