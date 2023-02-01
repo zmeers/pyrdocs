@@ -5,21 +5,13 @@
 ### Python
 
 ```{r}
-if(isTRUE(file.exists('{{{{notitle.alias}}}}_py.md'))){
 #| child: '{{{{notitle.alias}}}}_py.md'
-}else{
-  print("File does not exist.")
-}
 ```
 
 ### R
 
 ```{r}
-if(isTRUE(file.exists('{{{{notitle.alias}}}}_r.md'))){
 #| child: '{{{{notitle.alias}}}}_r.md'
-}else{
-  print("File does not exist.")
-}
 ```
 :::
 

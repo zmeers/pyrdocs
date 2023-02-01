@@ -5,17 +5,19 @@ split_file_tree <- function(file_list,
                             command_name = "",
                             entry_value = NULL,
                             addl_entries = list(),
-                            verbosity = "summary") {
+                            verbosity = "verbose") {
   tree_start <- Sys.time()
-  file_unique <- unique(path_dir(output_file_list))
+  file_unique <- unique(path_dir(file_list))
   file_sort <- sort(file_unique)
+  output_file_unique <- unique(path_dir(output_file_list))
+  output_file_sort <- sort(output_file_unique)
   rel_sort <- substr(
-    file_sort,
-    nchar(path_dir(base_folder)) + 2,
-    nchar(file_sort)
+    output_file_sort,
+    nchar(path_dir(base_folder)),
+    nchar(output_file_sort)
   )
   for (i in seq_along(rel_sort)) {
-    matched_files <- path_dir(output_file_list) == file_sort[i]
+    matched_files <- path_dir(file_list) == file_sort[i]
     matched_files_actual <- path_dir(file_list) == file_sort[i]
     no_files <- sum(matched_files)
     no_caption <- ifelse(no_files > 1, "files", "file")
@@ -35,8 +37,9 @@ split_file_tree <- function(file_list,
     section_start <- Sys.time()
     cat(cat_msg)
     if (command_name != "") {
-      walk(
+      purrr::walk2(
         file_list[matched_files_actual],
+        output_file_list,
         ~ {
           start_time <- Sys.time()
           if (verbosity == "verbose") {
@@ -49,7 +52,7 @@ split_file_tree <- function(file_list,
           )
           res_msg <- ""
           if (!is.null(res)) {
-            if (path_file(res) != path_file(.x)) res_msg <- blue(" =>", res)
+            res_msg <- blue(" =>", paste0(.y, ".md"))
           }
           stop_time <- Sys.time()
           if (verbosity == "verbose") {

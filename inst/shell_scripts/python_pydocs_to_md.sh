@@ -3,7 +3,7 @@
 cd "$1"/"$2"
 # install or update pip and yq if they are not installed or up to date
 for pkg in pydoc-markdown; do
-  pip3 list --q --uptodate | grep "${pkg} " || pip3 install --upgrade ${pkg} --q
+  pip3 list --q --q --uptodate | grep "${pkg} " || pip3 install --upgrade ${pkg} --q --q
 done
 
 pydoc-markdown -m "$3"."$4" -I $(pwd) -q '{
