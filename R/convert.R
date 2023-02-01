@@ -26,7 +26,7 @@ pyrdocs_convert <- function(package_source_folder = here::here(),
                             commit = c("latest_tag", "latest_commit"),
                             package_description = NULL,
                             site_yml_file = system.file("templates/_quarto.yml", package = "pyrdocs"),
-                            site_css_file = NULL
+                            site_docs = NULL
 ){
 
   # sha_file <- fs::path(qfs, ".ecodown")
@@ -144,6 +144,16 @@ pyrdocs_convert <- function(package_source_folder = here::here(),
     site_yml_file,
     fs::path(here::here(), quarto_sub_folder, fs::path_file(site_yml_file))
   )
+
+  if(fs::dir_exists(here::here(), quarto_sub_folder, "html")) fs::dir_delete(here::here(), quarto_sub_folder, "html")
+
+  if(!is.null(site_docs)){
+    fs::dir_copy(
+      site_docs,
+      fs::path(here::here(), quarto_sub_folder, fs::path_file(site_docs))
+    )
+  }
+
 
   ecodown:::msg_color_title(paste0("Compiled Markdown documents can be accessed at ", crayon::blue(fs::path_file(fs::path(package_source_folder, quarto_sub_folder)))))
 
