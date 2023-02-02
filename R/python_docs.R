@@ -89,11 +89,11 @@ split_python_md_modules <- function(input,
                                  if(length(table_header_id) > 0){
                                    x <- append(x, table_header, after = table_header_id)
                                  }
-                                 if(startsWith(x, 'def')){
+                                 if(startsWith(x, "def")){
                                    x <- lapply(x,function(y) sub(", ",",\n    ", as.character(y)))
                                    x <- lapply(x,function(y) sub("([(])","[(]\n    ", as.character(y)))
                                    x <- lapply(x,function(y) sub("([)])","\n[)]", as.character(y)))
-                                 }
+                                 } else x
                                  # remove description as it'll be in the parent file (before the tab switching)
                                  description <- header_id - 2
                                  x <- x[-c(description)]
