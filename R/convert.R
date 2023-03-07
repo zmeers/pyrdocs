@@ -140,11 +140,6 @@ pyrdocs_convert <- function(package_source_folder = here::here(),
 
   clean_r_files(r_files)
 
-  fs::file_copy(
-    site_yml_file,
-    fs::path(here::here(), quarto_sub_folder, fs::path_file(site_yml_file))
-  )
-
   if(fs::dir_exists(fs::path(here::here(), quarto_sub_folder, "html"))) fs::dir_delete(fs::path(here::here(), quarto_sub_folder, "html"))
 
   if(!is.null(site_docs)){
@@ -153,6 +148,8 @@ pyrdocs_convert <- function(package_source_folder = here::here(),
       fs::path(here::here(), quarto_sub_folder, fs::path_file(site_docs))
     )
   }
+
+  if(isTRUE(fs::dir_exists(fs::path(here::here(), quarto_sub_folder, "articles")) && fs::dir_exists(fs::path(here::here(), quarto_sub_folder, "vignettes")))) fs::dir_delete(fs::path(here::here(), quarto_sub_folder, "vignettes"))
 
 
   ecodown:::msg_color_title(paste0("Compiled Markdown documents can be accessed at ", crayon::blue(fs::path_file(fs::path(package_source_folder, quarto_sub_folder)))))
