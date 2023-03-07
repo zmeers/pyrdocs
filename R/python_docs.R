@@ -90,9 +90,9 @@ split_python_md_modules <- function(input,
                                    x <- append(x, table_header, after = table_header_id)
                                  }
                                  # split up the function so that each argument is on a new line
-                                 x <- ifelse(grepl("^def.*", x), lapply(x,function(y) gsub(", ",",\n    ", as.character(y))), x)
-                                 x <- ifelse(grepl("^def.*", x), lapply(x,function(y) gsub("([(])","(\n    ", as.character(y))), x)
-                                 x <- ifelse(grepl("^def.*", x), lapply(x,function(y) gsub("([)])","\n)", as.character(y))), x)
+                                 x <- ifelse(grepl("(^def.*)|(^@.*)|(^class.*)", x), lapply(x,function(y) gsub(", ",",\n    ", as.character(y))), x)
+                                 x <- ifelse(grepl("(^def.*)|(^@.*)|(^class.*)", x), lapply(x,function(y) gsub("([(])","(\n    ", as.character(y))), x)
+                                 x <- ifelse(grepl("(^def.*)|(^@.*)|(^class.*)", x), lapply(x,function(y) gsub("([)])","\n)", as.character(y))), x)
                                  # remove description as it'll be in the parent file (before the tab switching)
                                  description <- header_id - 2
                                  x <- x[-c(description)]
