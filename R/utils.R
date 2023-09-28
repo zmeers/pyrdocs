@@ -66,7 +66,7 @@ build_python_md_files <- function(package_source_folder = package_source_folder,
 
   ecodown:::file_tree(python_files,
                       base_folder = package_source_folder,
-                      command_name = "generate_python_md_modules",
+                      command_name = "pyrdocs::generate_python_md_modules",
                       addl_entries = list(base_folder = package_source_folder,
                                           python_pkg = python_sub_folder,
                                           python_module = package_name,
