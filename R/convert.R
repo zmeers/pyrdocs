@@ -145,7 +145,8 @@ pyrdocs_convert <- function(package_source_folder = here::here(),
   if(!is.null(site_docs)){
     fs::dir_copy(
       site_docs,
-      fs::path(here::here(), quarto_sub_folder, fs::path_file(site_docs))
+      fs::path(here::here(), quarto_sub_folder, fs::path_file(site_docs)),
+      overwrite = TRUE
     )
   }
 
