@@ -107,6 +107,12 @@ pyrdocs_convert <- function(package_source_folder = here::here(),
                   overwrite = T)
   }
 
+  if(fs::file_exists(fs::path(package_source_folder,"changelog.md"))){
+    fs::file_copy(fs::path(package_source_folder,"changelog.md"),
+                  fs::path(package_source_folder, quarto_sub_folder, "changelog.md"),
+                  overwrite = T)
+  }
+
   if(fs::dir_exists(fs::path(package_source_folder, python_sub_folder, reference_folder))){
     fs::dir_delete(fs::path(package_source_folder, python_sub_folder, reference_folder))
   }
@@ -140,17 +146,27 @@ pyrdocs_convert <- function(package_source_folder = here::here(),
 
   clean_r_files(r_files)
 
-  if(fs::dir_exists(fs::path(here::here(), quarto_sub_folder, "html"))) fs::dir_delete(fs::path(here::here(), quarto_sub_folder, "html"))
+  if(fs::dir_exists(fs::path(package_source_folder, quarto_sub_folder, "html"))) fs::dir_delete(fs::path(package_source_folder, quarto_sub_folder, "html"))
 
   if(!is.null(site_docs)){
     fs::dir_copy(
       site_docs,
-      fs::path(here::here(), quarto_sub_folder, fs::path_file(site_docs)),
+      fs::path(package_source_folder, quarto_sub_folder),
       overwrite = TRUE
     )
   }
 
-  if(isTRUE(fs::dir_exists(fs::path(here::here(), quarto_sub_folder, "articles")) && fs::dir_exists(fs::path(here::here(), quarto_sub_folder, "vignettes")))) fs::dir_delete(fs::path(here::here(), quarto_sub_folder, "vignettes"))
+  if(isTRUE(fs::dir_exists(fs::path(package_source_folder, quarto_sub_folder, "articles")) &&
+            fs::dir_exists(fs::path(package_source_folder, quarto_sub_folder, "vignettes"))
+            ) ||
+     isTRUE(fs::dir_exists(fs::path(package_source_folder, quarto_sub_folder, "site/articles")) &&
+            fs::dir_exists(fs::path(package_source_folder, quarto_sub_folder, "vignettes")))){
+    fs::dir_delete(fs::path(package_source_folder, quarto_sub_folder, "vignettes"))
+  }
+
+  if(!is.null(site_yml_file)){
+    file_copy(site_yml_file, fs::path(package_source_folder, quarto_sub_folder, fs::path_file(site_yml_file)))
+  }
 
 
   ecodown:::msg_color_title(paste0("Compiled Markdown documents can be accessed at ", crayon::blue(fs::path_file(fs::path(package_source_folder, quarto_sub_folder)))))
