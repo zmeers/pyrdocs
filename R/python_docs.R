@@ -91,15 +91,16 @@ split_python_md_modules <- function(input,
                                  }
                                  # split up the function so that each argument is on a new line
                                  x <- ifelse(grepl("(^def.*)|(^@.*)|(^class.*)", x), lapply(x,function(y) gsub(", ",",\n    ", as.character(y))), x)
+                                 x <- ifelse(grepl("(^def.*)|(^@.*)|(^class.*)", x), lapply(x,function(y) gsub("[list,\n    str]", "[list, str]" as.character(y))), x)
                                  x <- ifelse(grepl("(^def.*)|(^@.*)|(^class.*)", x), lapply(x,function(y) gsub("([(])","(\n    ", as.character(y))), x)
                                  x <- ifelse(grepl("(^def.*)|(^@.*)|(^class.*)", x), lapply(x,function(y) gsub("([)])","\n)", as.character(y))), x)
-                                 
+
                                  # remove description as it'll be in the parent file (before the tab switching)
                                  description <- header_id - 2
                                  x <- x[-c(description)]
                                  # convert table rows to rows and columns
-                                 x <- lapply(x,function(y) sub("([(]`)"," | `", as.character(y)))
-                                 x <- lapply(x,function(y) sub("(`[)]:)","` | ", as.character(y)))
+                                 x <- lapply(x,function(y) sub("([(]`)"," | ", as.character(y)))
+                                 x <- lapply(x,function(y) sub("(`[)]:)"," | ", as.character(y)))
                                  x <- lapply(x,function(y) sub("(^- )","", as.character(y)))
                                  return(x)
                                })
