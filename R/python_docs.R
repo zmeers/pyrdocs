@@ -91,7 +91,7 @@ split_python_md_modules <- function(input,
                                  }
                                  # split up the function so that each argument is on a new line
                                  x <- ifelse(grepl("(^def.*)|(^@.*)|(^class.*)", x), lapply(x,function(y) gsub(", ",",\n    ", as.character(y))), x)
-                                 x <- ifelse(grepl("(^def.*)|(^@.*)|(^class.*)", x), lapply(x,function(y) gsub("[list,\n    str]", "[list, str]" as.character(y))), x)
+                                 x <- ifelse(grepl("(^def.*)|(^@.*)|(^class.*)", x), lapply(x,function(y) gsub("[list,\n    str]", "[list, str]", as.character(y))), x)
                                  x <- ifelse(grepl("(^def.*)|(^@.*)|(^class.*)", x), lapply(x,function(y) gsub("([(])","(\n    ", as.character(y))), x)
                                  x <- ifelse(grepl("(^def.*)|(^@.*)|(^class.*)", x), lapply(x,function(y) gsub("([)])","\n)", as.character(y))), x)
 
