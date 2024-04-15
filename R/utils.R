@@ -92,3 +92,28 @@ clean_r_files <- function(r_files){
   }
 
 }
+
+replace_repeating_strings <- function(strings) {
+  # Initialize an empty vector to store the modified strings
+  modified_strings <- character(length(strings))
+
+  # Initialize a variable to store the previous string
+  previous_string <- NULL
+
+  # Loop through each string in the vector
+  for (i in seq_along(strings)) {
+    # If the current string is the same as the previous one, skip it
+    if (i > 1 && strings[i] == previous_string) {
+      next
+    }
+
+    # Otherwise, store the current string as the modified string
+    modified_strings[i] <- strings[i]
+
+    # Update the previous string
+    previous_string <- strings[i]
+  }
+
+  # Return the modified vector of strings
+  return(modified_strings[!is.na(modified_strings)])
+}

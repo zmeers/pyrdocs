@@ -172,6 +172,16 @@ pyrdocs_convert <- function(package_source_folder = here::here(),
   }
 
 
+  if(fs::file_exists(fs::path(package_source_folder, quarto_sub_folder, "reference", "index", ext = "md"))){
+    file_path <- fs::path(package_source_folder, quarto_sub_folder, "reference", "index", ext = "md")
+    content <- readLines(file_path)
+    # Apply the function to the content of the markdown file
+    modified_content <- replace_repeating_strings(content)
+    # Write the modified content back to the markdown file
+    writeLines(modified_content, file_path)
+  }
+
+
   ecodown:::msg_color_title(paste0("Compiled Markdown documents can be accessed at ", crayon::blue(fs::path_file(fs::path(package_source_folder, quarto_sub_folder)))))
 
 }
