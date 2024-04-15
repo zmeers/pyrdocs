@@ -91,15 +91,17 @@ split_python_md_modules <- function(input,
                                  }
                                  # split up the function so that each argument is on a new line
                                  x <- ifelse(grepl("(^def.*)|(^@.*)|(^class.*)", x), lapply(x,function(y) gsub(", ",",\n    ", as.character(y))), x)
+                                 x <- ifelse(grepl("(^def.*)|(^@.*)|(^class.*)", x), lapply(x,function(y) gsub("list,\n    str", "list, str", as.character(y))), x)
                                  x <- ifelse(grepl("(^def.*)|(^@.*)|(^class.*)", x), lapply(x,function(y) gsub("([(])","(\n    ", as.character(y))), x)
                                  x <- ifelse(grepl("(^def.*)|(^@.*)|(^class.*)", x), lapply(x,function(y) gsub("([)])","\n)", as.character(y))), x)
-                                 
+                                 x <- ifelse(grepl("(^def.*)|(^@.*)|(^class.*)", x), lapply(x,function(y) gsub("`","", as.character(y))), x)
+
                                  # remove description as it'll be in the parent file (before the tab switching)
                                  description <- header_id - 2
                                  x <- x[-c(description)]
                                  # convert table rows to rows and columns
-                                 x <- lapply(x,function(y) sub("([(]`)"," | `", as.character(y)))
-                                 x <- lapply(x,function(y) sub("(`[)]:)","` | ", as.character(y)))
+                                 x <- lapply(x,function(y) sub("([(]`)"," | ", as.character(y)))
+                                 x <- lapply(x,function(y) sub("(`[)]:)"," | ", as.character(y)))
                                  x <- lapply(x,function(y) sub("(^- )","", as.character(y)))
                                  return(x)
                                })
@@ -135,7 +137,7 @@ clean_parent_to_child_functions <- function(input,
   input_description <- input <- fs::path(package_source_folder, quarto_sub_folder, reference_folder, input, ext = "qmd")
   if(isTRUE(file.info(input)$size>0)){
     md_file_header <- parsermd::parse_rmd(input_description) |>parsermd::as_tibble()
-    md_file_header <- md_file_header[!md_file_header$sec_h3 %in% c("R", "Python", "See also"), ]
+    md_file_header <- md_file_header[!md_file_header$sec_h3 %in% c("R", "Python"), ]
     md_file_header <- md_file_header[!is.na(md_file_header$sec_h3), ]
     names(md_file_header)[names(md_file_header) == "sec_h3"] <- "sec"
 

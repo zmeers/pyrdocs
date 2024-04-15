@@ -148,24 +148,29 @@ pyrdocs_convert <- function(package_source_folder = here::here(),
 
   if(fs::dir_exists(fs::path(package_source_folder, quarto_sub_folder, "html"))) fs::dir_delete(fs::path(package_source_folder, quarto_sub_folder, "html"))
 
-  if(!is.null(site_docs)){
-    fs::dir_copy(
-      site_docs,
-      fs::path(package_source_folder, quarto_sub_folder),
-      overwrite = TRUE
-    )
+
+
+  if(isTRUE(fs::dir_exists(fs::path(package_source_folder, quarto_sub_folder, "articles")) &&
+            fs::dir_exists(fs::path(package_source_folder, quarto_sub_folder, "vignettes")) &&
+            !is.null(site_docs))){
+    fs::dir_delete(fs::path(package_source_folder, quarto_sub_folder, "vignettes"))
+    fs::dir_delete(fs::path(package_source_folder, quarto_sub_folder, "articles"))
   }
 
   if(isTRUE(fs::dir_exists(fs::path(package_source_folder, quarto_sub_folder, "articles")) &&
-            fs::dir_exists(fs::path(package_source_folder, quarto_sub_folder, "vignettes"))
-            ) ||
-     isTRUE(fs::dir_exists(fs::path(package_source_folder, quarto_sub_folder, "site/articles")) &&
-            fs::dir_exists(fs::path(package_source_folder, quarto_sub_folder, "vignettes")))){
-    fs::dir_delete(fs::path(package_source_folder, quarto_sub_folder, "vignettes"))
+            fs::dir_exists(fs::path(package_source_folder, quarto_sub_folder, "vignettes")) &&
+            is.null(site_docs))){
+    fs::dir_delete(fs::path(package_source_folder, quarto_sub_folder, "articles"))
   }
 
-  if(!is.null(site_yml_file)){
-    file_copy(site_yml_file, fs::path(package_source_folder, quarto_sub_folder, fs::path_file(site_yml_file)))
+
+  if(fs::file_exists(fs::path(package_source_folder, quarto_sub_folder, "reference", "index", ext = "md"))){
+    file_path <- fs::path(package_source_folder, quarto_sub_folder, "reference", "index", ext = "md")
+    content <- readLines(file_path)
+    # Apply the function to the content of the markdown file
+    modified_content <- replace_repeating_strings(content)
+    # Write the modified content back to the markdown file
+    writeLines(modified_content, file_path)
   }
 
 
