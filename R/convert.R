@@ -149,7 +149,6 @@ pyrdocs_convert <- function(package_source_folder = here::here(),
   if(fs::dir_exists(fs::path(package_source_folder, quarto_sub_folder, "html"))) fs::dir_delete(fs::path(package_source_folder, quarto_sub_folder, "html"))
 
 
-
   if(isTRUE(fs::dir_exists(fs::path(package_source_folder, quarto_sub_folder, "articles")) &&
             fs::dir_exists(fs::path(package_source_folder, quarto_sub_folder, "vignettes")) &&
             !is.null(site_docs))){
@@ -161,6 +160,15 @@ pyrdocs_convert <- function(package_source_folder = here::here(),
             fs::dir_exists(fs::path(package_source_folder, quarto_sub_folder, "vignettes")) &&
             is.null(site_docs))){
     fs::dir_delete(fs::path(package_source_folder, quarto_sub_folder, "articles"))
+  }
+
+
+  if(!is.null(site_docs)){
+    fs::dir_copy(
+      site_docs,
+      fs::path(package_source_folder, quarto_sub_folder),
+      overwrite = TRUE
+    )
   }
 
 
